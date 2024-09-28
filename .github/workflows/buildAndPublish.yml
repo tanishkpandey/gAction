@@ -1,8 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Build and Publish to docker hub
-
+name: Build and Publish to Docker Hub
 
 on:
   push:
@@ -18,7 +14,6 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
@@ -30,8 +25,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
 
-    - uses: mr-smithers-excellent/docker-build-push@v6
-    - with:
+    - name: Build and push Docker image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
         image: tanishkpandey/github-actions
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
